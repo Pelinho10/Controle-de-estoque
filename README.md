@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>HWT Manutenção - Controle de Estoque</title>
+    <title>HWT Manutenção</title>
     <style>
         * {
             margin: 0;
@@ -216,7 +216,7 @@
             border-radius: 10px;
         }
 
-        /* Menu Inferior */
+        /* Menu Inferior - AGORA COM 3 ITENS */
         .bottom-menu {
             position: fixed;
             bottom: 0;
@@ -241,7 +241,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px;
+            padding: 5px 20px;
         }
 
         .menu-item.active {
@@ -523,41 +523,6 @@
             border-radius: 8px;
             font-size: 16px;
         }
-
-        .profile-section {
-            padding: 15px;
-        }
-
-        .profile-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .profile-avatar {
-            font-size: 60px;
-            margin-bottom: 10px;
-        }
-
-        .profile-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -565,18 +530,18 @@
     <div id="loginScreen" class="login-container">
         <div class="login-header">
             <h1>🔧 HWT Manutenção</h1>
-            <p>Controle de Estoque e Empréstimos</p>
+            <p>Faça login para acessar</p>
         </div>
         
         <div class="login-form">
             <div class="input-group">
                 <label>Usuário</label>
-                <input type="text" id="username" placeholder="Digite o usuário" value="admin">
+                <input type="text" id="username" placeholder="Digite o usuário">
             </div>
             
             <div class="input-group">
                 <label>Senha</label>
-                <input type="password" id="password" placeholder="Digite a senha" value="hwtmanutençao">
+                <input type="password" id="password" placeholder="Digite a senha">
             </div>
             
             <button class="login-btn" onclick="login()">Entrar</button>
@@ -658,20 +623,7 @@
             </div>
         </div>
 
-        <!-- Perfil -->
-        <div id="profileScreen" style="display: none;">
-            <div class="profile-section">
-                <div class="profile-card">
-                    <div class="profile-avatar">👤</div>
-                    <div class="profile-name" id="profileName">admin</div>
-                    <div class="profile-email">hwtmanutençao</div>
-                </div>
-                
-                <button class="logout-btn" onclick="logout()">Sair da conta</button>
-            </div>
-        </div>
-
-        <!-- Menu Inferior -->
+        <!-- Menu Inferior - AGORA COM 3 ITENS -->
         <div class="bottom-menu">
             <button class="menu-item active" onclick="changeScreen('dashboard')">
                 <span>🏠</span>
@@ -684,10 +636,6 @@
             <button class="menu-item" onclick="changeScreen('movements')">
                 <span>📊</span>
                 Mov.
-            </button>
-            <button class="menu-item" onclick="changeScreen('profile')">
-                <span>👤</span>
-                Perfil
             </button>
         </div>
     </div>
@@ -793,9 +741,9 @@
     </div>
 
     <script>
-        // DADOS INICIAIS - TODOS OS ITENS (COM GERAL, SEM OUTROS)
+        // DADOS INICIAIS
         let products = JSON.parse(localStorage.getItem('products')) || [
-            // 🌱 JARDIM
+            // Jardim
             { id: 1, name: 'Tesoura de Poda', local: 'Prateleira A1', category: 'Jardim', quantity: 8, minQuantity: 3 },
             { id: 2, name: 'Pá (Vanga)', local: 'Prateleira A1', category: 'Jardim', quantity: 5, minQuantity: 2 },
             { id: 3, name: 'Pá de Mão', local: 'Gaveta 1', category: 'Jardim', quantity: 10, minQuantity: 4 },
@@ -807,17 +755,17 @@
             { id: 9, name: 'Carrinho de Mão', local: 'Estoque Externo', category: 'Jardim', quantity: 3, minQuantity: 1 },
             { id: 10, name: 'Roçadeira', local: 'Galpão Externo', category: 'Jardim', quantity: 2, minQuantity: 1 },
             
-            // ⚡ ELÉTRICA
+            // Elétrica
             { id: 11, name: 'Alicate Universal', local: 'Gaveta 10', category: 'Elétrica', quantity: 8, minQuantity: 3 },
             { id: 12, name: 'Alicate de Corte', local: 'Gaveta 10', category: 'Elétrica', quantity: 8, minQuantity: 3 },
-            { id: 13, name: 'Alicate Desencapador de Fios', local: 'Gaveta 10', category: 'Elétrica', quantity: 5, minQuantity: 2 },
-            { id: 14, name: 'Chave de Fenda (Kit 6 peças)', local: 'Gaveta 11', category: 'Elétrica', quantity: 6, minQuantity: 2 },
-            { id: 15, name: 'Chave Phillips (Kit 6 peças)', local: 'Gaveta 11', category: 'Elétrica', quantity: 6, minQuantity: 2 },
-            { id: 16, name: 'Chave de Teste (Detector de Tensão)', local: 'Gaveta 12', category: 'Elétrica', quantity: 4, minQuantity: 2 },
+            { id: 13, name: 'Alicate Desencapador', local: 'Gaveta 10', category: 'Elétrica', quantity: 5, minQuantity: 2 },
+            { id: 14, name: 'Chave de Fenda (Kit)', local: 'Gaveta 11', category: 'Elétrica', quantity: 6, minQuantity: 2 },
+            { id: 15, name: 'Chave Phillips (Kit)', local: 'Gaveta 11', category: 'Elétrica', quantity: 6, minQuantity: 2 },
+            { id: 16, name: 'Chave de Teste', local: 'Gaveta 12', category: 'Elétrica', quantity: 4, minQuantity: 2 },
             { id: 17, name: 'Multímetro Digital', local: 'Gaveta 12', category: 'Elétrica', quantity: 3, minQuantity: 1 },
-            { id: 18, name: 'Fita Isolante (rolo)', local: 'Gaveta 12', category: 'Elétrica', quantity: 20, minQuantity: 8 },
+            { id: 18, name: 'Fita Isolante', local: 'Gaveta 12', category: 'Elétrica', quantity: 20, minQuantity: 8 },
             
-            // 🔨 FERRAMENTAS
+            // Ferramentas
             { id: 19, name: 'Martelo', local: 'Prateleira B1', category: 'Ferramentas', quantity: 8, minQuantity: 3 },
             { id: 20, name: 'Trena 5m', local: 'Gaveta 13', category: 'Ferramentas', quantity: 10, minQuantity: 4 },
             { id: 21, name: 'Trena 10m', local: 'Gaveta 13', category: 'Ferramentas', quantity: 5, minQuantity: 2 },
@@ -826,31 +774,29 @@
             { id: 24, name: 'Furadeira/Parafusadeira', local: 'Armário C1', category: 'Ferramentas', quantity: 4, minQuantity: 2 },
             { id: 25, name: 'Furadeira de Impacto', local: 'Armário C1', category: 'Ferramentas', quantity: 3, minQuantity: 1 },
             { id: 26, name: 'Estilete', local: 'Gaveta 15', category: 'Ferramentas', quantity: 12, minQuantity: 4 },
-            { id: 27, name: 'Nível de Bolha 60cm', local: 'Prateleira B2', category: 'Ferramentas', quantity: 5, minQuantity: 2 },
-            { id: 28, name: 'Jogo de Chaves Allen (métrico)', local: 'Gaveta 15', category: 'Ferramentas', quantity: 4, minQuantity: 2 },
-            { id: 29, name: 'Jogo de Chaves Allen (polegada)', local: 'Gaveta 15', category: 'Ferramentas', quantity: 3, minQuantity: 1 },
-            { id: 30, name: 'Lanterna', local: 'Prateleira B3', category: 'Ferramentas', quantity: 6, minQuantity: 2 },
-            { id: 31, name: 'Lanterna de Cabeça', local: 'Prateleira B3', category: 'Ferramentas', quantity: 4, minQuantity: 2 },
+            { id: 27, name: 'Nível de Bolha', local: 'Prateleira B2', category: 'Ferramentas', quantity: 5, minQuantity: 2 },
+            { id: 28, name: 'Jogo de Chaves Allen', local: 'Gaveta 15', category: 'Ferramentas', quantity: 4, minQuantity: 2 },
+            { id: 29, name: 'Lanterna', local: 'Prateleira B3', category: 'Ferramentas', quantity: 6, minQuantity: 2 },
             
-            // 🪖 EPI
-            { id: 32, name: 'Luva de Raspa (par)', local: 'Armário D1', category: 'EPI', quantity: 12, minQuantity: 5 },
-            { id: 33, name: 'Óculos de Proteção', local: 'Armário D1', category: 'EPI', quantity: 15, minQuantity: 6 },
-            { id: 34, name: 'Protetor Auricular', local: 'Armário D1', category: 'EPI', quantity: 8, minQuantity: 3 },
-            { id: 35, name: 'Capacete de Segurança', local: 'Armário D1', category: 'EPI', quantity: 10, minQuantity: 4 },
+            // EPI
+            { id: 30, name: 'Luva de Raspa', local: 'Armário D1', category: 'EPI', quantity: 12, minQuantity: 5 },
+            { id: 31, name: 'Óculos de Proteção', local: 'Armário D1', category: 'EPI', quantity: 15, minQuantity: 6 },
+            { id: 32, name: 'Protetor Auricular', local: 'Armário D1', category: 'EPI', quantity: 8, minQuantity: 3 },
+            { id: 33, name: 'Capacete de Segurança', local: 'Armário D1', category: 'EPI', quantity: 10, minQuantity: 4 },
             
-            // 💧 HIDRÁULICA
-            { id: 36, name: 'Tubo PVC 25mm (barra 6m)', local: 'Cantinho Tubos', category: 'Hidráulica', quantity: 10, minQuantity: 4 },
-            { id: 37, name: 'Joelho 90° 25mm', local: 'Caixa 5', category: 'Hidráulica', quantity: 30, minQuantity: 10 },
-            { id: 38, name: 'Fita Veda-rosca', local: 'Gaveta 16', category: 'Hidráulica', quantity: 15, minQuantity: 5 },
-            { id: 39, name: 'Cola para PVC', local: 'Gaveta 16', category: 'Hidráulica', quantity: 8, minQuantity: 3 },
+            // Hidráulica
+            { id: 34, name: 'Tubo PVC 25mm', local: 'Cantinho Tubos', category: 'Hidráulica', quantity: 10, minQuantity: 4 },
+            { id: 35, name: 'Joelho 90° 25mm', local: 'Caixa 5', category: 'Hidráulica', quantity: 30, minQuantity: 10 },
+            { id: 36, name: 'Fita Veda-rosca', local: 'Gaveta 16', category: 'Hidráulica', quantity: 15, minQuantity: 5 },
+            { id: 37, name: 'Cola para PVC', local: 'Gaveta 16', category: 'Hidráulica', quantity: 8, minQuantity: 3 },
             
-            // 📋 GERAL (itens diversos)
-            { id: 40, name: 'Cadeado Médio', local: 'Gaveta 17', category: 'Geral', quantity: 8, minQuantity: 3 },
-            { id: 41, name: 'Cadeado Grande', local: 'Gaveta 17', category: 'Geral', quantity: 5, minQuantity: 2 },
-            { id: 42, name: 'Corda Nylon 10mm (rolo)', local: 'Prateleira E1', category: 'Geral', quantity: 4, minQuantity: 2 },
-            { id: 43, name: 'Abraçadeira Nylon (pacote)', local: 'Gaveta 18', category: 'Geral', quantity: 6, minQuantity: 2 },
-            { id: 44, name: 'Lona Plástica 4x5m', local: 'Prateleira E2', category: 'Geral', quantity: 3, minQuantity: 1 },
-            { id: 45, name: 'Fita Crepe (rolo)', local: 'Gaveta 18', category: 'Geral', quantity: 12, minQuantity: 4 }
+            // Geral
+            { id: 38, name: 'Cadeado Médio', local: 'Gaveta 17', category: 'Geral', quantity: 8, minQuantity: 3 },
+            { id: 39, name: 'Cadeado Grande', local: 'Gaveta 17', category: 'Geral', quantity: 5, minQuantity: 2 },
+            { id: 40, name: 'Corda Nylon', local: 'Prateleira E1', category: 'Geral', quantity: 4, minQuantity: 2 },
+            { id: 41, name: 'Abraçadeira Nylon', local: 'Gaveta 18', category: 'Geral', quantity: 6, minQuantity: 2 },
+            { id: 42, name: 'Lona Plástica', local: 'Prateleira E2', category: 'Geral', quantity: 3, minQuantity: 1 },
+            { id: 43, name: 'Fita Crepe', local: 'Gaveta 18', category: 'Geral', quantity: 12, minQuantity: 4 }
         ];
         
         let movements = JSON.parse(localStorage.getItem('movements')) || [];
@@ -858,7 +804,9 @@
         let currentUser = null;
         let currentCategory = 'todos';
 
-        // Login fixo
+        // ============================================
+        // LOGIN
+        // ============================================
         function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -867,7 +815,6 @@
                 currentUser = { name: 'admin' };
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appScreen').style.display = 'block';
-                document.getElementById('profileName').textContent = 'admin';
                 updateDashboard();
                 loadProducts();
                 loadCategoryFilter();
@@ -876,12 +823,6 @@
             } else {
                 alert('Usuário ou senha inválidos!');
             }
-        }
-
-        function logout() {
-            currentUser = null;
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('appScreen').style.display = 'none';
         }
 
         function updateDashboard() {
@@ -1198,7 +1139,6 @@
             const productId = parseInt(document.getElementById('loanProduct').value);
             const quantity = parseInt(document.getElementById('loanQuantity').value);
             const date = document.getElementById('loanDate').value;
-            const observation = document.getElementById('loanObservation').value;
             
             if (!userName || !productId || !quantity || !date) {
                 alert('Preencha todos os campos!');
@@ -1215,7 +1155,6 @@
                 productLocal: product.local,
                 quantity,
                 date,
-                observation,
                 returned: false
             });
             
@@ -1316,15 +1255,13 @@
             document.getElementById('dashboardScreen').style.display = 'none';
             document.getElementById('productsScreen').style.display = 'none';
             document.getElementById('movementsScreen').style.display = 'none';
-            document.getElementById('profileScreen').style.display = 'none';
             
             document.getElementById(screen + 'Screen').style.display = 'block';
             
             const titles = {
                 'dashboard': 'Dashboard',
                 'products': 'Itens do Estoque',
-                'movements': 'Movimentações',
-                'profile': 'Perfil'
+                'movements': 'Movimentações'
             };
             document.getElementById('screenTitle').textContent = titles[screen];
             
