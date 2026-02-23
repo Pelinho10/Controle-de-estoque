@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -209,56 +210,6 @@
             font-size: 40px;
             margin-bottom: 10px;
             opacity: 0.5;
-        }
-
-        .movements-list {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .movement-item {
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .movement-item:last-child {
-            border-bottom: none;
-        }
-
-        .movement-info {
-            flex: 1;
-        }
-
-        .movement-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 3px;
-        }
-
-        .movement-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .movement-value {
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        .value-positive {
-            background: #e6f7e6;
-            color: #27ae60;
-        }
-
-        .value-negative {
-            background: #fee7e7;
-            color: #e74c3c;
         }
 
         /* Menu Inferior */
@@ -564,7 +515,7 @@
 
             <div class="input-group">
                 <label>Usuário</label>
-                <input type="text" id="username" placeholder="Digite seu usuário" value="Pablo Murilo">
+                <input type="text" id="username" placeholder="Digite seu usuário" value="admin">
             </div>
 
             <div class="input-group">
@@ -649,7 +600,7 @@
             </div>
         </div>
 
-        <!-- Tela de Produtos (inicialmente oculta) -->
+        <!-- Tela de Produtos -->
         <div id="productsScreen" class="hidden" style="margin-top: 20px;">
             <div class="app-header">
                 <h1>📦 Itens</h1>
@@ -666,7 +617,7 @@
             <div id="productsList"></div>
         </div>
 
-        <!-- Tela de Empréstimos (inicialmente oculta) -->
+        <!-- Tela de Empréstimos -->
         <div id="loansScreen" class="hidden" style="margin-top: 20px;">
             <div class="app-header">
                 <h1>🔧 Empréstimos</h1>
@@ -764,7 +715,8 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (username && password) {
+            // Usuário: admin | Senha: 123456
+            if (username === 'admin' && password === '123456') {
                 currentUser = { name: username };
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appScreen').classList.remove('hidden');
@@ -774,7 +726,7 @@
                 loadLoanProductSelect();
                 loadActiveLoans();
             } else {
-                alert('Preencha usuário e senha!');
+                alert('Usuário ou senha incorretos! Tente admin / 123456');
             }
         }
 
@@ -804,6 +756,10 @@
                 document.getElementById('loansScreen').classList.remove('hidden');
                 loadActiveLoans();
             }
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.menu-item').classList.add('active');
         }
 
         // DASHBOARD
@@ -841,8 +797,8 @@
                     <div style="background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px;">
                         <div style="display: flex; justify-content: space-between;">
                             <strong>${m.productName}</strong>
-                            <span style="color: ${m.type === 'entry' ? '#27ae60' : '#e74c3c'}">
-                                ${m.type === 'entry' ? '+'+m.quantity : '-'+m.quantity}
+                            <span style="color: ${m.type === 'entry' ? '#27ae60' : m.type === 'exit' ? '#e74c3c' : '#17a2b8'}">
+                                ${m.type === 'entry' ? '+'+m.quantity : m.type === 'exit' ? '-'+m.quantity : '🔧'+m.quantity}
                             </span>
                         </div>
                         <small>${m.date}</small>
@@ -924,7 +880,7 @@
                         </div>
                     </div>
                 `;
-            }).join('') || '<p style="text-align: center;">🔍 Nenhum item encontrado</p>';
+            }).join('') || '<p style="text-align: center; padding: 20px;">🔍 Nenhum item encontrado</p>';
         }
 
         function loadProducts() {
@@ -1062,6 +1018,9 @@
             loadProducts();
             loadLoanProductSelect();
             loadActiveLoans();
+            
+            // Voltar para o dashboard após emprestar
+            showScreen('dashboard');
         }
 
         function loadActiveLoans() {
@@ -1094,7 +1053,7 @@
                     `).join('');
                 }
             } else {
-                if (list) list.innerHTML = '<p style="text-align: center;">Nenhum empréstimo ativo</p>';
+                if (list) list.innerHTML = '<p style="text-align: center; padding: 20px;">Nenhum empréstimo ativo</p>';
                 if (loanSection) {
                     loanSection.innerHTML = `
                         <div class="empty-icon">📭</div>
@@ -1145,6 +1104,9 @@
             loadProducts();
             loadLoanProductSelect();
             loadActiveLoans();
+            
+            // Voltar para o dashboard após devolver
+            showScreen('dashboard');
         }
 
         function closeModal(id) {
