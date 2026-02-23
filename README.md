@@ -2,281 +2,369 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
         /* Container principal */
-        .container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
+        .app-container {
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* Cards */
-        .card {
+        /* Menu Lateral */
+        .sidebar {
+            width: 250px;
             background: white;
-            border-radius: 20px;
-            padding: 30px 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 20px 30px 20px;
+            border-bottom: 1px solid #f0f0f0;
             margin-bottom: 20px;
         }
 
-        /* Tela de Login */
-        .login-header {
-            text-align: center;
+        .logo h2 {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logo p {
+            color: #667eea;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        .menu-item.active {
+            background: #f0f3ff;
+            color: #667eea;
+            border-left-color: #667eea;
+        }
+
+        .menu-item span {
+            font-size: 20px;
+            margin-right: 15px;
+        }
+
+        .menu-item .menu-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Cards de Estatísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
         }
 
-        .login-header h1 {
-            color: #333;
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
         }
 
-        .login-header p {
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: #f0f3ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        .stat-icon span {
+            font-size: 30px;
+        }
+
+        .stat-info h3 {
             color: #666;
             font-size: 14px;
-        }
-
-        .login-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .btn-outline {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #667eea;
-            background: transparent;
-            color: #667eea;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: #667eea;
-            color: white;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary:hover {
-            background: #5a67d8;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 500;
             margin-bottom: 5px;
         }
 
-        .input-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+        .stat-info .number {
+            color: #333;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
+        .stat-info .label {
             color: #999;
-            font-size: 13px;
+            font-size: 12px;
+            margin-top: 3px;
         }
 
-        /* Tela Principal */
-        .app-header {
+        /* Seções */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .app-header h1 {
-            color: white;
-            font-size: 24px;
+        .section-header h2 {
+            color: #333;
+            font-size: 18px;
             font-weight: 600;
         }
 
-        .user-menu {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 15px;
-            border-radius: 20px;
+        .section-header button {
+            background: #667eea;
             color: white;
-            font-weight: 500;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+        .section-header button:hover {
+            background: #5a67d8;
         }
 
-        .stat-card {
-            background: white;
-            padding: 15px 10px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        /* Listas */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s;
         }
 
-        .stat-card .number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #667eea;
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: #f8f9fa;
+        }
+
+        .item-info h4 {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
             margin-bottom: 5px;
         }
 
-        .stat-card .label {
-            font-size: 12px;
+        .item-info p {
             color: #666;
+            font-size: 13px;
         }
 
-        .stat-card .sub-label {
-            font-size: 10px;
+        .item-info small {
             color: #999;
-            margin-top: 3px;
+            font-size: 12px;
         }
 
-        .section-title {
+        .item-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-low {
+            background: #fee7e7;
+            color: #e74c3c;
+        }
+
+        .status-ok {
+            background: #e6f7e6;
+            color: #27ae60;
+        }
+
+        .status-loan {
+            background: #e1f5fe;
+            color: #17a2b8;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .item-actions button {
+            padding: 5px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .item-actions button:hover {
+            opacity: 0.8;
+        }
+
+        .btn-edit {
+            background: #3498db;
             color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
         }
 
+        .btn-loan {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-return {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Empty State */
         .empty-state {
-            background: white;
-            border-radius: 15px;
-            padding: 30px 20px;
             text-align: center;
-            color: #666;
-            margin-bottom: 20px;
+            padding: 40px;
+            color: #999;
         }
 
-        .empty-state p {
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .empty-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
+        .empty-state span {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 15px;
             opacity: 0.5;
         }
 
-        /* Menu Inferior */
-        .bottom-menu {
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        /* Filtros */
+        .filters {
             display: flex;
-            background: white;
-            border-radius: 20px;
-            padding: 10px;
-            margin-top: 20px;
-        }
-
-        .menu-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px;
-            border: none;
-            background: transparent;
-            color: #999;
-            font-size: 12px;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-
-        .menu-item.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .menu-item span {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        /* Produtos */
-        .products-header {
-            display: flex;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .search-box {
             flex: 1;
+            min-width: 250px;
             padding: 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-        }
-
-        .add-btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            background: #27ae60;
-            color: white;
-            border-radius: 10px;
-            font-size: 24px;
-            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
         }
 
         .category-filter {
             display: flex;
             gap: 8px;
-            margin-bottom: 20px;
             overflow-x: auto;
             padding: 5px 0;
         }
@@ -285,8 +373,8 @@
             padding: 8px 15px;
             border: none;
             border-radius: 20px;
-            background: white;
-            color: #333;
+            background: #f0f0f0;
+            color: #666;
             font-weight: 500;
             font-size: 13px;
             cursor: pointer;
@@ -296,114 +384,6 @@
         .category-filter button.active {
             background: #667eea;
             color: white;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid #667eea;
-        }
-
-        .product-card.low-stock {
-            border-left-color: #e74c3c;
-        }
-
-        .product-card.on-loan {
-            border-left-color: #17a2b8;
-            background: #f0f9ff;
-        }
-
-        .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .product-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .product-category {
-            background: #f0f0f0;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .product-local {
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .product-details {
-            display: flex;
-            gap: 15px;
-            margin: 10px 0;
-        }
-
-        .product-detail {
-            flex: 1;
-            text-align: center;
-        }
-
-        .product-detail label {
-            font-size: 11px;
-            color: #999;
-            display: block;
-        }
-
-        .product-detail span {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .product-actions button {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .edit-btn {
-            background: #3498db;
-            color: white;
-        }
-
-        .loan-btn {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .loan-badge {
-            display: inline-block;
-            background: #17a2b8;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
-            margin-bottom: 8px;
         }
 
         /* Modal */
@@ -418,7 +398,6 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 20px;
         }
 
         .modal.active {
@@ -427,11 +406,11 @@
 
         .modal-content {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 400px;
-            width: 100%;
-            max-height: 80vh;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
@@ -466,31 +445,69 @@
         .modal-form textarea {
             padding: 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
         }
 
-        .submit-btn {
+        .modal-form button {
             background: #27ae60;
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
         }
 
-        .return-btn {
-            background: #28a745;
+        /* Login */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-form input {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            background: #667eea;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
+            font-size: 16px;
             font-weight: 600;
-            width: 100%;
-            margin-top: 10px;
             cursor: pointer;
         }
 
@@ -500,196 +517,205 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Tela de Login -->
-        <div id="loginScreen" class="card">
-            <div class="login-header">
-                <h1>Controle de Estoque</h1>
-                <p>Sistema simples e eficiente para gerenciar seu estoque</p>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-header">
+            <h1>Controle de Estoque</h1>
+            <p>Faça login para acessar o sistema</p>
+        </div>
+        <div class="login-form">
+            <input type="text" id="username" placeholder="Usuário" value="admin">
+            <input type="password" id="password" placeholder="Senha" value="123456">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Aplicativo Principal -->
+    <div id="appScreen" class="app-container hidden">
+        <!-- Menu Lateral -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Controle de Estoque</h2>
+                <p>Menu Principal</p>
             </div>
-
-            <div class="login-buttons">
-                <button class="btn-primary">Entrar</button>
-                <button class="btn-outline">Cadastrar</button>
+            
+            <div class="menu-item active" onclick="showSection('dashboard')">
+                <span>📊</span>
+                <span class="menu-text">Dashboard</span>
             </div>
-
-            <div class="input-group">
-                <label>Usuário</label>
-                <input type="text" id="username" placeholder="Digite seu usuário" value="admin">
+            <div class="menu-item" onclick="showSection('products')">
+                <span>📦</span>
+                <span class="menu-text">Produtos</span>
             </div>
-
-            <div class="input-group">
-                <label>Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha" value="123456">
-            </div>
-
-            <button class="btn-primary" onclick="login()">Entrar</button>
-
-            <div class="login-footer">
-                Sistema para até 4 usuários
+            <div class="menu-item" onclick="showSection('loans')">
+                <span>🔧</span>
+                <span class="menu-text">Empréstimos</span>
             </div>
         </div>
 
-        <!-- Tela Principal -->
-        <div id="appScreen" class="hidden">
-            <!-- Cabeçalho -->
-            <div class="app-header">
-                <h1># Painel</h1>
-                <div class="user-menu" onclick="logout()">👤 Sair</div>
-            </div>
-
-            <!-- Visão geral -->
-            <p style="color: white; margin-bottom: 15px; opacity: 0.9;">
-                Visão geral do seu estoque em tempo real
-            </p>
-
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="number" id="totalProducts">0</div>
-                    <div class="label">Total de Produtos</div>
-                    <div class="sub-label">produtos cadastrados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="lowStockCount">0</div>
-                    <div class="label">Estoque baixo</div>
-                    <div class="sub-label">produtos com estoque baixo</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="todayMovements">0</div>
-                    <div class="label">Movimentações Hoje</div>
-                    <div class="sub-label">movimentações hoje</div>
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1 id="sectionTitle">Dashboard</h1>
+                <div class="user-info">
+                    <span class="user-name">admin</span>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
                 </div>
             </div>
 
-            <!-- Seção Estoque Baixo -->
-            <div class="section-title">📦 Estoque baixo</div>
-            <div id="lowStockSection" class="empty-state">
-                <div class="empty-icon">✅</div>
-                <p>Nenhum produto com estoque baixo!</p>
-            </div>
-
-            <!-- Seção Emprestados -->
-            <div class="section-title">🔧 Emprestados</div>
-            <div id="loanSection" class="empty-state">
-                <div class="empty-icon">📭</div>
-                <p>Nenhum produto emprestado no momento.</p>
-            </div>
-
-            <!-- Seção Movimentações Recentes -->
-            <div class="section-title">📋 Movimentações Recentes</div>
-            <div id="movementsSection" class="empty-state">
-                <div class="empty-icon">📊</div>
-                <p>Nenhuma transferência registrada ainda.</p>
-            </div>
-
-            <!-- Menu Inferior -->
-            <div class="bottom-menu">
-                <button class="menu-item active" onclick="showScreen('dashboard')">
-                    <span>🏠</span>
-                    Início
-                </button>
-                <button class="menu-item" onclick="showScreen('products')">
-                    <span>📦</span>
-                    Itens
-                </button>
-                <button class="menu-item" onclick="showScreen('loans')">
-                    <span>🔧</span>
-                    Empréstimos
-                </button>
-            </div>
-        </div>
-
-        <!-- Tela de Produtos -->
-        <div id="productsScreen" class="hidden" style="margin-top: 20px;">
-            <div class="app-header">
-                <h1>📦 Itens</h1>
-                <div class="user-menu" onclick="showScreen('dashboard')">← Voltar</div>
-            </div>
-
-            <div class="products-header">
-                <input type="text" class="search-box" id="searchProduct" placeholder="Buscar item..." onkeyup="filterProducts()">
-                <button class="add-btn" onclick="openProductModal()">+</button>
-            </div>
-
-            <div class="category-filter" id="categoryFilter"></div>
-
-            <div id="productsList"></div>
-        </div>
-
-        <!-- Tela de Empréstimos -->
-        <div id="loansScreen" class="hidden" style="margin-top: 20px;">
-            <div class="app-header">
-                <h1>🔧 Empréstimos</h1>
-                <div class="user-menu" onclick="showScreen('dashboard')">← Voltar</div>
-            </div>
-
-            <button class="btn-primary" onclick="openLoanModal()" style="margin-bottom: 20px; width: 100%;">
-                + Novo Empréstimo
-            </button>
-
-            <div id="activeLoansList"></div>
-        </div>
-
-        <!-- Modal de Produto -->
-        <div id="productModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="modalTitle">Novo Produto</h2>
-                    <button class="close-btn" onclick="closeModal('productModal')">&times;</button>
+            <!-- Seção Dashboard -->
+            <div id="dashboardSection">
+                <!-- Cards de Estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <span>📦</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total de Produtos</h3>
+                            <div class="number" id="totalProducts">0</div>
+                            <div class="label">itens cadastrados</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <span>⚠️</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Estoque Baixo</h3>
+                            <div class="number" id="lowStockCount">0</div>
+                            <div class="label">produtos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <span>🔧</span>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Emprestados</h3>
+                            <div class="number" id="loanedCount">0</div>
+                            <div class="label">itens</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-form">
-                    <input type="text" id="productName" placeholder="Nome do produto">
-                    <input type="text" id="productLocal" placeholder="Local">
-                    <select id="productCategory">
-                        <option value="">Categoria</option>
-                        <option value="Jardim">Jardim</option>
-                        <option value="Elétrica">Elétrica</option>
-                        <option value="Ferramentas">Ferramentas</option>
-                        <option value="EPI">EPI</option>
-                        <option value="Hidráulica">Hidráulica</option>
-                        <option value="Geral">Geral</option>
-                    </select>
-                    <input type="number" id="productQuantity" placeholder="Quantidade">
-                    <input type="number" id="productMinQuantity" placeholder="Quantidade mínima">
-                    <input type="hidden" id="editingProductId">
-                    <button class="submit-btn" onclick="saveProduct()">Salvar</button>
+
+                <!-- Estoque Baixo -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>📦 Estoque Baixo</h2>
+                    </div>
+                    <div id="lowStockList" class="empty-state">
+                        <span>✅</span>
+                        <p>Nenhum produto com estoque baixo</p>
+                    </div>
+                </div>
+
+                <!-- Empréstimos Ativos -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🔧 Empréstimos Ativos</h2>
+                    </div>
+                    <div id="activeLoansList" class="empty-state">
+                        <span>📭</span>
+                        <p>Nenhum empréstimo ativo</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Produtos -->
+            <div id="productsSection" class="hidden">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>📦 Todos os Produtos</h2>
+                        <button onclick="openProductModal()">
+                            <span>+</span> Novo Produto
+                        </button>
+                    </div>
+
+                    <div class="filters">
+                        <input type="text" class="search-box" id="searchProduct" placeholder="Buscar por nome ou local..." onkeyup="filterProducts()">
+                        <div class="category-filter" id="categoryFilter"></div>
+                    </div>
+
+                    <div id="productsList"></div>
+                </div>
+            </div>
+
+            <!-- Seção Empréstimos -->
+            <div id="loansSection" class="hidden">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🔧 Gerenciar Empréstimos</h2>
+                        <button onclick="openLoanModal()">
+                            <span>+</span> Novo Empréstimo
+                        </button>
+                    </div>
+
+                    <div id="allLoansList"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal de Empréstimo -->
-        <div id="loanModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Novo Empréstimo</h2>
-                    <button class="close-btn" onclick="closeModal('loanModal')">&times;</button>
-                </div>
-                <div class="modal-form">
-                    <input type="text" id="loanUserName" placeholder="Nome de quem pegou">
-                    <select id="loanProduct"></select>
-                    <input type="number" id="loanQuantity" placeholder="Quantidade" value="1">
-                    <input type="date" id="loanDate">
-                    <textarea id="loanObservation" placeholder="Observação"></textarea>
-                    <button class="submit-btn" onclick="saveLoan()">Registrar</button>
-                </div>
+    <!-- Modal de Produto -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Produto</h2>
+                <button class="close-btn" onclick="closeModal('productModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <input type="text" id="productName" placeholder="Nome do produto">
+                <input type="text" id="productLocal" placeholder="Localização">
+                <select id="productCategory">
+                    <option value="">Selecione a categoria</option>
+                    <option value="Jardim">Jardim</option>
+                    <option value="Elétrica">Elétrica</option>
+                    <option value="Ferramentas">Ferramentas</option>
+                    <option value="EPI">EPI</option>
+                    <option value="Hidráulica">Hidráulica</option>
+                    <option value="Geral">Geral</option>
+                </select>
+                <input type="number" id="productQuantity" placeholder="Quantidade">
+                <input type="number" id="productMinQuantity" placeholder="Quantidade mínima">
+                <input type="hidden" id="editingProductId">
+                <button onclick="saveProduct()">Salvar</button>
             </div>
         </div>
+    </div>
 
-        <!-- Modal de Devolução -->
-        <div id="returnModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Registrar Devolução</h2>
-                    <button class="close-btn" onclick="closeModal('returnModal')">&times;</button>
-                </div>
-                <div class="modal-form">
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;" id="returnInfo"></div>
-                    <input type="date" id="returnDate">
-                    <textarea id="returnObservation" placeholder="Observação"></textarea>
-                    <input type="hidden" id="returnLoanId">
-                    <button class="submit-btn" onclick="saveReturn()">Confirmar</button>
-                </div>
+    <!-- Modal de Empréstimo -->
+    <div id="loanModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Empréstimo</h2>
+                <button class="close-btn" onclick="closeModal('loanModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <input type="text" id="loanUserName" placeholder="Nome de quem está pegando">
+                <select id="loanProduct"></select>
+                <input type="number" id="loanQuantity" placeholder="Quantidade" value="1">
+                <input type="date" id="loanDate">
+                <textarea id="loanObservation" placeholder="Observação"></textarea>
+                <button onclick="saveLoan()">Registrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Devolução -->
+    <div id="returnModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Devolução</h2>
+                <button class="close-btn" onclick="closeModal('returnModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;" id="returnInfo"></div>
+                <input type="date" id="returnDate">
+                <textarea id="returnObservation" placeholder="Observação"></textarea>
+                <input type="hidden" id="returnLoanId">
+                <button onclick="saveReturn()">Confirmar</button>
             </div>
         </div>
     </div>
@@ -715,51 +741,49 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Usuário: admin | Senha: 123456
             if (username === 'admin' && password === '123456') {
                 currentUser = { name: username };
-                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appScreen').classList.remove('hidden');
                 updateDashboard();
                 loadProducts();
                 loadCategoryFilter();
                 loadLoanProductSelect();
-                loadActiveLoans();
             } else {
-                alert('Usuário ou senha incorretos! Tente admin / 123456');
+                alert('Usuário ou senha incorretos! Use admin / 123456');
             }
         }
 
         function logout() {
             currentUser = null;
-            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('appScreen').classList.add('hidden');
-            document.getElementById('productsScreen').classList.add('hidden');
-            document.getElementById('loansScreen').classList.add('hidden');
         }
 
         // NAVEGAÇÃO
-        function showScreen(screen) {
-            document.getElementById('appScreen').classList.add('hidden');
-            document.getElementById('productsScreen').classList.add('hidden');
-            document.getElementById('loansScreen').classList.add('hidden');
+        function showSection(section) {
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
             
-            if (screen === 'dashboard') {
-                document.getElementById('appScreen').classList.remove('hidden');
-                updateDashboard();
-                loadActiveLoans();
-            } else if (screen === 'products') {
-                document.getElementById('productsScreen').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('productsSection').classList.add('hidden');
+            document.getElementById('loansSection').classList.add('hidden');
+            
+            document.getElementById(section + 'Section').classList.remove('hidden');
+            
+            const titles = {
+                'dashboard': 'Dashboard',
+                'products': 'Produtos',
+                'loans': 'Empréstimos'
+            };
+            document.getElementById('sectionTitle').textContent = titles[section];
+            
+            if (section === 'products') {
                 loadProducts();
                 loadCategoryFilter();
-            } else if (screen === 'loans') {
-                document.getElementById('loansScreen').classList.remove('hidden');
-                loadActiveLoans();
+            } else if (section === 'loans') {
+                loadAllLoans();
             }
-            
-            // Atualizar menu ativo
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.menu-item').classList.add('active');
         }
 
         // DASHBOARD
@@ -769,45 +793,58 @@
             const lowStock = products.filter(p => p.quantity <= p.minQuantity);
             document.getElementById('lowStockCount').textContent = lowStock.length;
             
-            const today = new Date().toISOString().split('T')[0];
-            const todayMovements = movements.filter(m => m.date === today);
-            document.getElementById('todayMovements').textContent = todayMovements.length;
+            const activeLoans = loans.filter(l => !l.returned);
+            document.getElementById('loanedCount').textContent = activeLoans.length;
             
-            // Estoque baixo
-            const lowStockSection = document.getElementById('lowStockSection');
+            // Lista de estoque baixo
+            const lowStockList = document.getElementById('lowStockList');
             if (lowStock.length > 0) {
-                lowStockSection.innerHTML = lowStock.map(p => `
-                    <div style="background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; border-left: 4px solid #e74c3c;">
-                        <strong>${p.name}</strong> - ${p.quantity} / ${p.minQuantity}
-                        <br><small>📍 ${p.local}</small>
+                lowStockList.innerHTML = lowStock.map(p => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${p.name}</h4>
+                            <p>📍 ${p.local}</p>
+                            <small>Mínimo: ${p.minQuantity}</small>
+                        </div>
+                        <div class="item-status status-low">
+                            ${p.quantity} unid.
+                        </div>
                     </div>
                 `).join('');
             } else {
-                lowStockSection.innerHTML = `
-                    <div class="empty-icon">✅</div>
-                    <p>Nenhum produto com estoque baixo!</p>
+                lowStockList.innerHTML = `
+                    <div class="empty-state">
+                        <span>✅</span>
+                        <p>Nenhum produto com estoque baixo</p>
+                    </div>
                 `;
             }
             
-            // Movimentações recentes
-            const movementsSection = document.getElementById('movementsSection');
-            if (movements.length > 0) {
-                const recent = movements.sort((a,b)=>b.id-a.id).slice(0,5);
-                movementsSection.innerHTML = recent.map(m => `
-                    <div style="background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <strong>${m.productName}</strong>
-                            <span style="color: ${m.type === 'entry' ? '#27ae60' : m.type === 'exit' ? '#e74c3c' : '#17a2b8'}">
-                                ${m.type === 'entry' ? '+'+m.quantity : m.type === 'exit' ? '-'+m.quantity : '🔧'+m.quantity}
-                            </span>
+            // Lista de empréstimos ativos
+            const activeLoansList = document.getElementById('activeLoansList');
+            if (activeLoans.length > 0) {
+                activeLoansList.innerHTML = activeLoans.map(l => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${l.productName}</h4>
+                            <p>👤 ${l.userName}</p>
+                            <p>📍 ${l.productLocal}</p>
+                            <small>📅 ${l.date}</small>
                         </div>
-                        <small>${m.date}</small>
+                        <div class="item-status status-loan">
+                            ${l.quantity} unid.
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-return" onclick="openReturnModal(${l.id})">Devolver</button>
+                        </div>
                     </div>
                 `).join('');
             } else {
-                movementsSection.innerHTML = `
-                    <div class="empty-icon">📊</div>
-                    <p>Nenhuma transferência registrada ainda.</p>
+                activeLoansList.innerHTML = `
+                    <div class="empty-state">
+                        <span>📭</span>
+                        <p>Nenhum empréstimo ativo</p>
+                    </div>
                 `;
             }
         }
@@ -852,35 +889,24 @@
                 const available = p.quantity - loaned;
                 
                 return `
-                    <div class="product-card ${p.quantity <= p.minQuantity ? 'low-stock' : ''} ${loaned > 0 ? 'on-loan' : ''}">
-                        <div class="product-header">
-                            <span class="product-name">${p.name}</span>
-                            <span class="product-category">${p.category}</span>
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${p.name}</h4>
+                            <p>📍 ${p.local}</p>
+                            <p>🏷️ ${p.category}</p>
+                            ${loaned > 0 ? `<small>🔧 ${loaned} emprestado(s)</small>` : ''}
                         </div>
-                        <div class="product-local">📍 ${p.local}</div>
-                        ${loaned > 0 ? `<div class="loan-badge">🔧 ${loaned} emprestado(s)</div>` : ''}
-                        <div class="product-details">
-                            <div class="product-detail">
-                                <label>Disponível</label>
-                                <span style="color: ${available <= p.minQuantity ? '#e74c3c' : '#27ae60'}">${available}</span>
-                            </div>
-                            <div class="product-detail">
-                                <label>Total</label>
-                                <span>${p.quantity}</span>
-                            </div>
-                            <div class="product-detail">
-                                <label>Mínimo</label>
-                                <span>${p.minQuantity}</span>
-                            </div>
+                        <div class="item-status ${p.quantity <= p.minQuantity ? 'status-low' : 'status-ok'}">
+                            Disponível: ${available}
                         </div>
-                        <div class="product-actions">
-                            <button class="edit-btn" onclick="editProduct(${p.id})">Editar</button>
-                            <button class="loan-btn" onclick="openLoanModal(${p.id})">Emprestar</button>
-                            <button class="delete-btn" onclick="deleteProduct(${p.id})">Excluir</button>
+                        <div class="item-actions">
+                            <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
+                            <button class="btn-loan" onclick="openLoanModal(${p.id})">Emprestar</button>
+                            <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
                         </div>
                     </div>
                 `;
-            }).join('') || '<p style="text-align: center; padding: 20px;">🔍 Nenhum item encontrado</p>';
+            }).join('') || '<div class="empty-state"><span>🔍</span><p>Nenhum item encontrado</p></div>';
         }
 
         function loadProducts() {
@@ -1017,50 +1043,60 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
-            loadActiveLoans();
-            
-            // Voltar para o dashboard após emprestar
-            showScreen('dashboard');
+            showSection('dashboard');
         }
 
-        function loadActiveLoans() {
+        function loadAllLoans() {
+            const list = document.getElementById('allLoansList');
             const active = loans.filter(l => !l.returned);
-            const list = document.getElementById('activeLoansList');
-            const loanSection = document.getElementById('loanSection');
+            const returned = loans.filter(l => l.returned);
+            
+            if (active.length === 0 && returned.length === 0) {
+                list.innerHTML = '<div class="empty-state"><span>📭</span><p>Nenhum empréstimo registrado</p></div>';
+                return;
+            }
+            
+            let html = '<h3 style="margin-bottom: 15px;">🔧 Empréstimos Ativos</h3>';
             
             if (active.length > 0) {
-                if (list) {
-                    list.innerHTML = active.map(l => `
-                        <div style="background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #17a2b8;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <strong>👤 ${l.userName}</strong>
-                                <small>${l.date}</small>
-                            </div>
-                            <div style="margin: 8px 0;"><strong>${l.productName}</strong></div>
-                            <div>📍 ${l.productLocal}</div>
-                            <div>Quantidade: ${l.quantity}</div>
-                            <button class="return-btn" onclick="openReturnModal(${l.id})">↩️ Devolver</button>
+                html += active.map(l => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${l.productName}</h4>
+                            <p>👤 ${l.userName}</p>
+                            <p>📍 ${l.productLocal}</p>
+                            <small>📅 ${l.date}</small>
                         </div>
-                    `).join('');
-                }
-                
-                if (loanSection) {
-                    loanSection.innerHTML = active.map(l => `
-                        <div style="background: white; padding: 10px; margin-bottom: 5px; border-radius: 8px; border-left: 4px solid #17a2b8;">
-                            <strong>${l.productName}</strong> - ${l.userName}
-                            <br><small>📦 ${l.quantity} unid. - ${l.date}</small>
+                        <div class="item-status status-loan">
+                            ${l.quantity} unid.
                         </div>
-                    `).join('');
-                }
+                        <div class="item-actions">
+                            <button class="btn-return" onclick="openReturnModal(${l.id})">Devolver</button>
+                        </div>
+                    </div>
+                `).join('');
             } else {
-                if (list) list.innerHTML = '<p style="text-align: center; padding: 20px;">Nenhum empréstimo ativo</p>';
-                if (loanSection) {
-                    loanSection.innerHTML = `
-                        <div class="empty-icon">📭</div>
-                        <p>Nenhum produto emprestado no momento.</p>
-                    `;
-                }
+                html += '<p style="color: #999; padding: 15px;">Nenhum empréstimo ativo</p>';
             }
+            
+            if (returned.length > 0) {
+                html += '<h3 style="margin: 30px 0 15px;">✅ Histórico de Devoluções</h3>';
+                html += returned.slice(0, 5).map(l => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${l.productName}</h4>
+                            <p>👤 ${l.userName}</p>
+                            <p>📅 Empréstimo: ${l.date}</p>
+                            <p>✅ Devolução: ${l.returnDate || 'N/A'}</p>
+                        </div>
+                        <div class="item-status status-ok">
+                            ${l.quantity} unid.
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            list.innerHTML = html;
         }
 
         function openReturnModal(loanId) {
@@ -1086,6 +1122,7 @@
             if (index === -1) return;
             
             loans[index].returned = true;
+            loans[index].returnDate = returnDate;
             
             movements.push({
                 id: Date.now(),
@@ -1103,12 +1140,12 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
-            loadActiveLoans();
-            
-            // Voltar para o dashboard após devolver
-            showScreen('dashboard');
+            showSection('dashboard');
         }
 
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
->
+        }
+    </script>
+</body>
+</html>
