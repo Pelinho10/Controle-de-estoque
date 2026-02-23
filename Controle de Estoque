@@ -32,6 +32,7 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+            z-index: 100;
         }
 
         .logo {
@@ -89,6 +90,7 @@
             flex: 1;
             margin-left: 250px;
             padding: 30px;
+            min-height: 100vh;
         }
 
         /* Header */
@@ -555,7 +557,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
     </style>
 </head>
